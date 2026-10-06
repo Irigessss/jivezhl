@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JIVEZ // MFZ SYSTEM PROFILE</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Fira Code', monospace;
+        }
+
+        body {
+            background-color: #060608;
+            color: #d1d5db;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e53e3e;
+            border-radius: 2px;
+        }
+
+        /* Cyberpunk Red Glows & Borders */
+        .cyber-card {
+            background: rgba(13, 13, 18, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 62, 62, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(229, 62, 62, 0.03);
+            position: relative;
+        }
+
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #ef4444;
+            border-left: 2px solid #ef4444;
+        }
+
+        .cyber-card::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid #ef4444;
+            border-right: 2px solid #ef4444;
+        }
+
+        .cyber-btn {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            transition: all 0.25s ease;
+        }
+
+        .cyber-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            color: #fff;
+        }
+
+        /* Equalizer Animation */
+        .eq-bar {
+            width: 3px;
+            background-color: #ef4444;
+            animation: bounce 1s infinite ease-in-out alternate;
+        }
+
+        @keyframes bounce {
+            0% { height: 4px; }
+            100% { height: 22px; }
+        }
+
+        .eq-bar:nth-child(1) { animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { animation-delay: 0.3s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { animation-delay: 0.5s; }
+        .eq-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        /* Rotating Audio Disc */
+        .spinning-disc {
+            animation: spin 12s linear infinite;
+        }
+
+        .paused-disc {
+            animation-play-state: paused;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* 3D Holo Card Tilt Effect */
+        .holo-card-container {
+            perspective: 1000px;
+        }
+        
+        .holo-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between p-3 sm:p-6 bg-[#060608]">
+
+    <!-- Overlay Scanline -->
+    <div class="fixed inset-0 scanlines z-40 pointer-events-none"></div>
+
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover -z-10 opacity-20 filter contrast-125 brightness-50">
+        <source src="bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- Audio Element -->
+    <audio id="bgAudio" loop src="music.mp3"></audio>
+
+    <!-- ================= 1. INTRO / ENTRY SCREEN ================= -->
+    <div id="entryScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#050507]/90 backdrop-blur-md cursor-pointer transition-opacity duration-700">
+        <div class="cyber-card w-[92%] max-w-[420px] p-6 rounded-xl text-center flex flex-col items-center border border-red-900/40 shadow-[0_0_50px_rgba(239,68,68,0.15)]">
+            
+            <!-- 1. INTRO AVATAR -->
+            <div class="relative my-4">
+                <img src="intro-avatar.jpg" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=200&auto=format&fit=crop'" 
+                     class="w-24 h-24 rounded-full object-cover border-2 border-red-600/60 p-1 shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                <span class="w-3.5 h-3.5 bg-red-600 rounded-full absolute bottom-1 right-1 border-2 border-black animate-ping"></span>
+                <span class="w-3.5 h-3.5 bg-red-600 rounded-full absolute bottom-1 right-1 border-2 border-black"></span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-2xl font-bold tracking-widest text-white uppercase font-['Rajdhani'] mb-1">J I V E Z</h1>
+            <p class="text-[11px] text-red-500 tracking-widest mb-4">MFZ SYSTEM // MFZ PROFILE</p>
+
+            <!-- Song Pill Info -->
+            <div class="bg-black/60 border border-red-900/30 rounded-full px-4 py-1.5 flex items-center gap-2 mb-6 text-xs text-gray-300">
+                <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span class="font-mono text-[11px] truncate max-w-[220px]">Du Sơn Luyến</span>
+            </div>
+
+            <!-- Enter Button -->
+            <div class="cyber-btn w-full py-3 rounded-lg text-xs font-bold text-red-400 tracking-widest uppercase mb-4 animate-pulse">
+                [ CLICK TO ENTER ]
+            </div>
+
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider">✦ CLICK ANYWHERE TO ENTER & START AUDIO ✦</p>
+        </div>
+    </div>
+
+    <!-- ================= 2. MAIN DASHBOARD ================= -->
+    <div id="mainDashboard" class="w-full max-w-[1400px] mx-auto flex flex-col gap-5 opacity-0 transition-opacity duration-1000 pointer-events-none">
+
+        <!-- HEADER BAR -->
+        <header class="w-full flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-red-900/30 text-xs">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl font-black text-red-600 font-['Rajdhani'] tracking-tighter hover:text-red-500 cursor-pointer">MFZ</span>
+                <span class="bg-red-950/60 text-red-400 border border-red-800/40 px-2 py-0.5 rounded text-[10px]">SYS.V2.8/MFZGH</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+                <div class="bg-black/60 border border-red-900/30 px-3 py-1 rounded-md flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="pingVal" class="text-gray-300">15ms</span>
+                </div>
+                <div class="bg-black/60 border border-red-900/30 px-3 py-1 rounded-md text-gray-300">
+                    <span id="headerClock">19:00:48</span>
+                </div>
+                <div class="bg-black/60 border border-red-900/30 px-3 py-1 rounded-md text-red-400 hidden md:block">
+                    ATMOSPHERE: <span class="text-white">Basic</span>
+                </div>
+                <div class="bg-black/60 border border-red-900/30 px-3 py-1 rounded-md text-gray-400 hidden sm:block">
+                    VIEWS: <span class="text-white">1,772</span>
+                </div>
+                <div class="bg-black/60 border border-red-900/30 px-3 py-1 rounded-md text-red-500 hidden sm:block">
+                    ★ SOULS: 666
+                </div>
+            </div>
+        </header>
+
+        <!-- TOP SECTION: PROFILE & MUSIC PLAYER -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+            <!-- LEFT PANEL: USER PROFILE CARD (4 Cols) -->
+            <div class="lg:col-span-4 cyber-card rounded-xl p-4 flex flex-col justify-between gap-4">
+                <div>
+                    <!-- 2. PROFILE BANNER -->
+                    <div class="h-28 w-full rounded-lg overflow-hidden relative bg-red-950/30 border border-red-900/20">
+                        <img src="banner.jpg" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop'" class="w-full h-full object-cover opacity-60 filter grayscale contrast-125">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d12] via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- 3. MAIN PROFILE AVATAR -->
+                    <div class="relative -mt-10 ml-3 flex items-end justify-between pr-2">
+                        <div class="relative">
+                            <img src="avatar.jpg" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=200&auto=format&fit=crop'" 
+                                 class="w-20 h-20 rounded-lg object-cover border-2 border-red-600 bg-black p-0.5 shadow-lg">
+                            <span class="w-3.5 h-3.5 bg-red-600 border-2 border-black rounded-full absolute -bottom-1 -right-1"></span>
+                        </div>
+                    </div>
+
+                    <!-- User Information -->
+                    <div class="mt-3 px-1">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-2xl font-extrabold text-white tracking-wide font-['Rajdhani']">JIVEZ</h2>
+                            <span class="text-blue-400 text-xs" title="Verified"><i class="fa-solid fa-circle-check"></i></span>
+                            <span class="text-purple-400 text-xs"><i class="fa-solid fa-code"></i></span>
+                        </div>
+
+                        <!-- Badges -->
+                        <div class="flex flex-wrap gap-1.5 my-2">
+                            <span class="text-[10px] bg-red-950/80 border border-red-800/50 text-red-400 px-2 py-0.5 rounded font-bold">⚡ DEV</span>
+                            <span class="text-[10px] bg-red-950/80 border border-red-800/50 text-red-400 px-2 py-0.5 rounded font-bold">HL ★ BEST DEV</span>
+                        </div>
+
+                        <p class="text-[11px] text-gray-400 font-mono">CALL ME HL // JIVEZ</p>
+
+                        <div class="my-3 p-3 bg-black/40 border border-red-900/20 rounded-lg text-xs text-gray-300 leading-relaxed">
+                            Nếu mục tiêu mày nằm trong khả thi sống đời mày đi sống đời tao làm gì<br>
+                         <a href="https://dsc.gg" target="_blank" class="text-red-400 underline hover:text-red-300"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-2 pt-2 border-t border-red-900/20">
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="copyToClipboard('26gn', 'User')" class="cyber-btn py-2 rounded text-center text-gray-300">Copy User</button>
+                        <button onclick="copyToClipboard('1218353795919118354', 'ID')" class="cyber-btn py-2 rounded text-center text-gray-300">Copy ID</button>
+                    </div>
+                    <a href="https://discord.gg/fC9ttTHp" target="_blank" class="cyber-btn w-full py-2.5 rounded text-center text-xs font-bold text-red-400 block uppercase tracking-wider">
+                        Copy LinkDiscord ➔
+                    </a>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: MUSIC PLAYER & LYRICS (8 Cols) -->
+            <div class="lg:col-span-8 cyber-card rounded-xl p-5 flex flex-col justify-between gap-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    
+                    <!-- Music Disc Player -->
+                    <div class="md:col-span-5 flex flex-col items-center justify-center text-center border-r-0 md:border-r border-red-900/20 pr-0 md:pr-4">
+                        
+                        <!-- 4. MUSIC DISC COVER -->
+                        <div class="relative my-2">
+                            <div id="discContainer" class="w-36 h-36 rounded-full border-4 border-red-600/40 p-1 spinning-disc paused-disc shadow-[0_0_30px_rgba(239,68,68,0.25)] bg-black">
+                                <img src="music-cover.jpg" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300&auto=format&fit=crop'" class="w-full h-full rounded-full object-cover">
+                            </div>
+                            <div class="w-6 h-6 bg-black border-2 border-red-600 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                        </div>
+
+                        <!-- Song Info -->
+                        <h3 class="text-xl font-bold text-white tracking-wide mt-3 font-['Rajdhani']">Du Sơn Luyến</h3>
+                        <p class="text-[11px] text-red-500 font-mono tracking-wider mb-2">Hành trình,trải nghiệm</p>
+
+                        <!-- Equalizer Visualizer -->
+                        <div class="flex items-end justify-center gap-1.5 h-6 my-2">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+
+                        <!-- Player Controls -->
+                        <div class="w-full space-y-2 mt-2">
+                            <div class="flex items-center justify-center gap-5 text-lg text-gray-300">
+                                <button class="hover:text-red-500 transition"><i class="fa-solid fa-rotate-left text-xs"></i></button>
+                                <button id="playPauseBtn" class="w-10 h-10 rounded-full bg-red-600 text-black flex items-center justify-center hover:bg-red-500 transition shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                                    <i id="playIcon" class="fa-solid fa-play text-sm ml-0.5"></i>
+                                </button>
+                                <button class="hover:text-red-500 transition"><i class="fa-solid fa-rotate-right text-xs"></i></button>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="flex items-center gap-2 text-[10px] font-mono text-gray-400">
+                                <span id="currTime">0:00</span>
+                                <input type="range" id="seekSlider" value="0" min="0" max="100" class="w-full accent-red-600 h-1 bg-gray-800 rounded cursor-pointer">
+                                <span id="durTime">3:10</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Lyrics Box -->
+                    <div class="md:col-span-7 flex flex-col justify-between h-full space-y-3">
+                        <div class="flex items-center justify-between border-b border-red-900/30 pb-2 text-xs">
+                            <span class="text-red-400 font-bold uppercase tracking-wider">✦ MYSELF LYRICS</span>
+                            <span class="text-gray-500 text-[10px]">HQ AUDIO</span>
+                        </div>
+
+                        <div class="bg-black/50 border border-red-900/20 rounded-lg p-4 h-48 overflow-y-auto text-xs leading-relaxed space-y-3 font-serif italic text-gray-400">
+                            <p class="text-gray-500 font-mono text-[11px]">一箭双雕</p>
+                             <p class="text-red-400 font-sans not-italic font-bold text-sm leading-snug">拔苗助长</p>
+                            <p>画蛇添足</p>
+                            <p>亡羊补牢</p>
+                            <p class="text-gray-300">塞翁失马</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOTTOM SECTION: ARCHIVE, GALLERY & HOLO CARD -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+
+            <!-- CARD 1: EXX ARCHIVE & STATUS (4 Cols) -->
+            <div class="md:col-span-4 cyber-card rounded-xl p-4 flex flex-col justify-between">
+                <div>
+                    <div class="text-xs text-red-400 font-bold mb-2 uppercase tracking-wider">✦ MFZ ARCHIVE</div>
+                    <p class="text-xs italic text-gray-400 leading-relaxed mb-4">
+                        "Đừng vì những thứ trước mắt mà đánh mất con người bạn!"
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono border-t border-red-900/20 pt-3">
+                    <div class="bg-black/40 p-2 rounded border border-red-900/20">
+                        <div class="text-emerald-400 font-bold">ONLINE</div>
+                        <div class="text-gray-500 text-[9px]">AUTO BOT</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded border border-red-900/20">
+                        <div class="text-amber-400 font-bold">ACTIVE</div>
+                        <div class="text-gray-500 text-[9px]">Auto Quest</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded border border-red-900/20">
+                        <div class="text-red-400 font-bold">SYNC</div>
+                        <div class="text-gray-500 text-[9px]">DB VV</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: GALLERY PREVIEW (4 Cols) -->
+            <div class="md:col-span-4 cyber-card rounded-xl p-4 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-xs mb-2">
+                    <span class="text-red-400 font-bold uppercase tracking-wider">✦ GALLERY</span>
+                    <span class="text-gray-500 text-[10px]">CLICK TO ZOOM</span>
+                </div>
+
+                <div class="relative h-36 rounded-lg overflow-hidden border border-red-900/30 bg-black flex items-center justify-center">
+                    <img id="galleryImg" src="gallery1.jpg" onerror="this.src='https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=500&auto=format&fit=crop'" class="w-full h-full object-cover">
+                    
+                    <button onclick="prevGallery()" class="absolute left-2 bg-black/70 text-white p-1.5 rounded hover:bg-red-600 transition text-xs"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button onclick="nextGallery()" class="absolute right-2 bg-black/70 text-white p-1.5 rounded hover:bg-red-600 transition text-xs"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <div class="text-[10px] text-center text-gray-500 font-mono mt-2">softsulk - gimme kiss</div>
+            </div>
+
+            <!-- CARD 3: 3D HOLO CARD (4 Cols) -->
+            <div class="md:col-span-4 cyber-card rounded-xl p-4 flex flex-col justify-between holo-card-container">
+                <div class="flex items-center justify-between text-xs mb-2">
+                    <span class="text-red-400 font-bold uppercase tracking-wider">✦ NEURAL VOID CARD</span>
+                    <span class="text-gray-500 text-[10px]">HOLO-3D</span>
+                </div>
+
+                <!-- 3D Card Item -->
+                <div id="holoCard" class="holo-card bg-gradient-to-br from-red-950 via-black to-red-900/40 p-3 rounded-lg border border-red-600/50 shadow-[0_0_20px_rgba(239,68,68,0.2)] text-center relative overflow-hidden">
+                    <div class="flex justify-between text-[9px] font-mono text-red-400 mb-1">
+                        <span>MFZ-CORE</span>
+                        <span class="font-bold">S-RANK</span>
+                    </div>
+
+                    <!-- 5. CARD AVATAR -->
+                    <div class="w-12 h-12 mx-auto my-1 rounded-full border border-red-500 p-0.5 overflow-hidden">
+                        <img src="card-avatar.jpg" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=100&auto=format&fit=crop'" class="w-full h-full rounded-full object-cover">
+                    </div>
+
+                    <h4 class="text-lg font-black text-white font-['Rajdhani'] tracking-wider">J I V E Z</h4>
+                    <p class="text-[9px] text-gray-400 uppercase font-mono">BO VAI CON NICK LA NOI BAN</p>
+
+                    <div class="mt-2 grid grid-cols-3 gap-1 text-[8px] font-mono bg-black/60 p-1 rounded border border-red-900/30">
+                        <div>PING: <span class="text-red-400">14MS</span></div>
+                        <div>POWER: <span class="text-red-400">MAX</span></div>
+                        <div>SERVER: <span class="text-red-400">NO</span></div>
+                    </div>
+                </div>
+
+                <button onclick="alert('Quẻ hôm nay của bạn: ĐẠI CÁT - Code không bug, Vercel deploy mượt mà!')" class="cyber-btn w-full py-1.5 rounded text-[11px] font-bold text-red-400 mt-2">
+                    ✦ RÚT QUẺ
+                </button>
+            </div>
+
+        </div>
+
+        <!-- FOOTER TERMINAL BAR -->
+        <footer class="cyber-card rounded-lg p-2.5 text-xs font-mono flex items-center gap-3">
+            <span class="text-red-500 font-bold">>>> ROOT TERMINAL // V2.0</span>
+            <span class="text-gray-400 text-[11px] truncate">[SYSTEM READY] Type 'help' for command inventory.</span>
+        </footer>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const entryScreen = document.getElementById('entryScreen');
+        const mainDashboard = document.getElementById('mainDashboard');
+        const bgAudio = document.getElementById('bgAudio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const discContainer = document.getElementById('discContainer');
+        const seekSlider = document.getElementById('seekSlider');
+        const currTimeElem = document.getElementById('currTime');
+        const durTimeElem = document.getElementById('durTime');
+        const headerClock = document.getElementById('headerClock');
+        const pingVal = document.getElementById('pingVal');
+
+        // Entry Click Listener
+        entryScreen.addEventListener('click', () => {
+            entryScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                entryScreen.style.display = 'none';
+                mainDashboard.classList.remove('opacity-0', 'pointer-events-none');
+            }, 700);
+
+            bgAudio.play().then(() => {
+                updatePlayState(true);
+            }).catch(e => console.log("Audio play blocked", e));
+        });
+
+        // Audio Play/Pause Toggle
+        playPauseBtn.addEventListener('click', () => {
+            if (bgAudio.paused) {
+                bgAudio.play();
+                updatePlayState(true);
+            } else {
+                bgAudio.pause();
+                updatePlayState(false);
+            }
+        });
+
+        function updatePlayState(isPlaying) {
+            if (isPlaying) {
+                playIcon.className = "fa-solid fa-pause text-sm";
+                discContainer.classList.remove('paused-disc');
+            } else {
+                playIcon.className = "fa-solid fa-play text-sm ml-0.5";
+                discContainer.classList.add('paused-disc');
+            }
+        }
+
+        // Time Update
+        bgAudio.addEventListener('timeupdate', () => {
+            if (bgAudio.duration) {
+                const progress = (bgAudio.currentTime / bgAudio.duration) * 100;
+                seekSlider.value = progress;
+                currTimeElem.textContent = formatTime(bgAudio.currentTime);
+                durTimeElem.textContent = formatTime(bgAudio.duration);
+            }
+        });
+
+        seekSlider.addEventListener('input', () => {
+            if (bgAudio.duration) {
+                bgAudio.currentTime = (seekSlider.value / 100) * bgAudio.duration;
+            }
+        });
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        // Clock & Ping Simulation
+        setInterval(() => {
+            const now = new Date();
+            headerClock.textContent = now.toTimeString().split(' ')[0];
+        }, 1000);
+
+        setInterval(() => {
+            const ping = Math.floor(Math.random() * 12) + 12;
+            pingVal.textContent = `${ping}ms`;
+        }, 3000);
+
+        // Copy to clipboard
+        function copyToClipboard(text, label) {
+            navigator.clipboard.writeText(text);
+            alert(`Đã sao chép ${label}: ${text}`);
+        }
+
+        // 6. GALLERY SEPARATE IMAGES ARRAY
+        const galleryImages = [
+            'gallery1.jpg',
+            'gallery2.jpg',
+            'gallery3.jpg'
+        ];
+        let galleryIdx = 0;
+
+        function nextGallery() {
+            galleryIdx = (galleryIdx + 1) % galleryImages.length;
+            document.getElementById('galleryImg').src = galleryImages[galleryIdx];
+        }
+
+        function prevGallery() {
+            galleryIdx = (galleryIdx - 1 + galleryImages.length) % galleryImages.length;
+            document.getElementById('galleryImg').src = galleryImages[galleryIdx];
+        }
+
+        // 3D Holo Card Mouse Effect
+        const cardContainer = document.querySelector('.holo-card-container');
+        const holoCard = document.getElementById('holoCard');
+
+        if (cardContainer && holoCard) {
+            cardContainer.addEventListener('mousemove', (e) => {
+                const rect = cardContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                holoCard.style.transform = `rotateY(${x / 10}deg) rotateX(${-y / 10}deg)`;
+            });
+
+            cardContainer.addEventListener('mouseleave', () => {
+                holoCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+    </script>
+</body>
+</html>
